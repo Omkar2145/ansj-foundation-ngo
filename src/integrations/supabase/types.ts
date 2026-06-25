@@ -375,12 +375,28 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "manager" | "donor" | "volunteer"
+      app_role: "admin" | "manager" | "donor" | "volunteer" | "csr"
+      beneficiary_kind: "child" | "elderly"
       call_kind: "video" | "audio"
       call_status: "requested" | "confirmed" | "completed" | "cancelled"
       donation_frequency: "one_time" | "monthly"
       donation_status: "pending" | "completed" | "failed" | "refunded"
+      kyc_doc_type:
+        | "aadhaar"
+        | "pan"
+        | "birth_certificate"
+        | "school_id"
+        | "parent_aadhaar"
+        | "bank_passbook"
+        | "voter_id"
+        | "pension_document"
+        | "photo"
+        | "address_proof"
+        | "gst_certificate"
+      kyc_subject_type: "beneficiary" | "volunteer" | "vendor"
       moderation_status: "pending" | "approved" | "rejected"
+      registrant_type: "volunteer" | "guardian" | "elderly" | "staff"
+      registration_status: "pending" | "under_review" | "approved" | "rejected"
       sponsorship_category: "child" | "elder"
       sponsorship_status: "active" | "paused" | "ended"
     }
@@ -510,12 +526,29 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "manager", "donor", "volunteer"],
+      app_role: ["admin", "manager", "donor", "volunteer", "csr"],
+      beneficiary_kind: ["child", "elderly"],
       call_kind: ["video", "audio"],
       call_status: ["requested", "confirmed", "completed", "cancelled"],
       donation_frequency: ["one_time", "monthly"],
       donation_status: ["pending", "completed", "failed", "refunded"],
+      kyc_doc_type: [
+        "aadhaar",
+        "pan",
+        "birth_certificate",
+        "school_id",
+        "parent_aadhaar",
+        "bank_passbook",
+        "voter_id",
+        "pension_document",
+        "photo",
+        "address_proof",
+        "gst_certificate",
+      ],
+      kyc_subject_type: ["beneficiary", "volunteer", "vendor"],
       moderation_status: ["pending", "approved", "rejected"],
+      registrant_type: ["volunteer", "guardian", "elderly", "staff"],
+      registration_status: ["pending", "under_review", "approved", "rejected"],
       sponsorship_category: ["child", "elder"],
       sponsorship_status: ["active", "paused", "ended"],
     },
