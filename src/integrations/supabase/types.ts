@@ -14,16 +14,169 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      donations: {
+        Row: {
+          amount: number
+          campaign: string | null
+          category: string
+          created_at: string
+          currency: string
+          frequency: Database["public"]["Enums"]["donation_frequency"]
+          id: string
+          message: string | null
+          receipt_number: string | null
+          status: Database["public"]["Enums"]["donation_status"]
+          transaction_ref: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          campaign?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          frequency?: Database["public"]["Enums"]["donation_frequency"]
+          id?: string
+          message?: string | null
+          receipt_number?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          transaction_ref?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          campaign?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          frequency?: Database["public"]["Enums"]["donation_frequency"]
+          id?: string
+          message?: string | null
+          receipt_number?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          transaction_ref?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          pan_number: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          pan_number?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          pan_number?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sponsorships: {
+        Row: {
+          beneficiary_id: string
+          beneficiary_name: string | null
+          category: Database["public"]["Enums"]["sponsorship_category"]
+          created_at: string
+          id: string
+          monthly_amount: number
+          next_renewal_at: string | null
+          started_at: string
+          status: Database["public"]["Enums"]["sponsorship_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          beneficiary_id: string
+          beneficiary_name?: string | null
+          category: Database["public"]["Enums"]["sponsorship_category"]
+          created_at?: string
+          id?: string
+          monthly_amount: number
+          next_renewal_at?: string | null
+          started_at?: string
+          status?: Database["public"]["Enums"]["sponsorship_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          beneficiary_id?: string
+          beneficiary_name?: string | null
+          category?: Database["public"]["Enums"]["sponsorship_category"]
+          created_at?: string
+          id?: string
+          monthly_amount?: number
+          next_renewal_at?: string | null
+          started_at?: string
+          status?: Database["public"]["Enums"]["sponsorship_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "manager" | "donor" | "volunteer"
+      donation_frequency: "one_time" | "monthly"
+      donation_status: "pending" | "completed" | "failed" | "refunded"
+      sponsorship_category: "child" | "elder"
+      sponsorship_status: "active" | "paused" | "ended"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +303,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "manager", "donor", "volunteer"],
+      donation_frequency: ["one_time", "monthly"],
+      donation_status: ["pending", "completed", "failed", "refunded"],
+      sponsorship_category: ["child", "elder"],
+      sponsorship_status: ["active", "paused", "ended"],
+    },
   },
 } as const
