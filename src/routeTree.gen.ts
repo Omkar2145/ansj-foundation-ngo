@@ -9,38 +9,320 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as TransparencyRouteImport } from './routes/transparency'
+import { Route as TaxBenefitsRouteImport } from './routes/tax-benefits'
+import { Route as SponsorRouteImport } from './routes/sponsor'
+import { Route as MediaRouteImport } from './routes/media'
+import { Route as DonateRouteImport } from './routes/donate'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CampaignsRouteImport } from './routes/campaigns'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RegisterVolunteerRouteImport } from './routes/register.volunteer'
+import { Route as RegisterBeneficiaryRouteImport } from './routes/register.beneficiary'
+import { Route as BeneficiariesSlugRouteImport } from './routes/beneficiaries.$slug'
+import { Route as AuthenticatedDonorRouteImport } from './routes/_authenticated/donor'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const VolunteerRoute = VolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransparencyRoute = TransparencyRouteImport.update({
+  id: '/transparency',
+  path: '/transparency',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaxBenefitsRoute = TaxBenefitsRouteImport.update({
+  id: '/tax-benefits',
+  path: '/tax-benefits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SponsorRoute = SponsorRouteImport.update({
+  id: '/sponsor',
+  path: '/sponsor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediaRoute = MediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignsRoute = CampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegisterVolunteerRoute = RegisterVolunteerRouteImport.update({
+  id: '/register/volunteer',
+  path: '/register/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterBeneficiaryRoute = RegisterBeneficiaryRouteImport.update({
+  id: '/register/beneficiary',
+  path: '/register/beneficiary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BeneficiariesSlugRoute = BeneficiariesSlugRouteImport.update({
+  id: '/beneficiaries/$slug',
+  path: '/beneficiaries/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDonorRoute = AuthenticatedDonorRouteImport.update({
+  id: '/donor',
+  path: '/donor',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/campaigns': typeof CampaignsRoute
+  '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/media': typeof MediaRoute
+  '/sponsor': typeof SponsorRoute
+  '/tax-benefits': typeof TaxBenefitsRoute
+  '/transparency': typeof TransparencyRoute
+  '/volunteer': typeof VolunteerRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/donor': typeof AuthenticatedDonorRoute
+  '/beneficiaries/$slug': typeof BeneficiariesSlugRoute
+  '/register/beneficiary': typeof RegisterBeneficiaryRoute
+  '/register/volunteer': typeof RegisterVolunteerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/campaigns': typeof CampaignsRoute
+  '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/media': typeof MediaRoute
+  '/sponsor': typeof SponsorRoute
+  '/tax-benefits': typeof TaxBenefitsRoute
+  '/transparency': typeof TransparencyRoute
+  '/volunteer': typeof VolunteerRoute
+  '/admin': typeof AuthenticatedAdminRoute
+  '/donor': typeof AuthenticatedDonorRoute
+  '/beneficiaries/$slug': typeof BeneficiariesSlugRoute
+  '/register/beneficiary': typeof RegisterBeneficiaryRoute
+  '/register/volunteer': typeof RegisterVolunteerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/campaigns': typeof CampaignsRoute
+  '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/media': typeof MediaRoute
+  '/sponsor': typeof SponsorRoute
+  '/tax-benefits': typeof TaxBenefitsRoute
+  '/transparency': typeof TransparencyRoute
+  '/volunteer': typeof VolunteerRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/donor': typeof AuthenticatedDonorRoute
+  '/beneficiaries/$slug': typeof BeneficiariesSlugRoute
+  '/register/beneficiary': typeof RegisterBeneficiaryRoute
+  '/register/volunteer': typeof RegisterVolunteerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/campaigns'
+    | '/contact'
+    | '/donate'
+    | '/media'
+    | '/sponsor'
+    | '/tax-benefits'
+    | '/transparency'
+    | '/volunteer'
+    | '/admin'
+    | '/donor'
+    | '/beneficiaries/$slug'
+    | '/register/beneficiary'
+    | '/register/volunteer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/campaigns'
+    | '/contact'
+    | '/donate'
+    | '/media'
+    | '/sponsor'
+    | '/tax-benefits'
+    | '/transparency'
+    | '/volunteer'
+    | '/admin'
+    | '/donor'
+    | '/beneficiaries/$slug'
+    | '/register/beneficiary'
+    | '/register/volunteer'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/about'
+    | '/auth'
+    | '/campaigns'
+    | '/contact'
+    | '/donate'
+    | '/media'
+    | '/sponsor'
+    | '/tax-benefits'
+    | '/transparency'
+    | '/volunteer'
+    | '/_authenticated/admin'
+    | '/_authenticated/donor'
+    | '/beneficiaries/$slug'
+    | '/register/beneficiary'
+    | '/register/volunteer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  CampaignsRoute: typeof CampaignsRoute
+  ContactRoute: typeof ContactRoute
+  DonateRoute: typeof DonateRoute
+  MediaRoute: typeof MediaRoute
+  SponsorRoute: typeof SponsorRoute
+  TaxBenefitsRoute: typeof TaxBenefitsRoute
+  TransparencyRoute: typeof TransparencyRoute
+  VolunteerRoute: typeof VolunteerRoute
+  BeneficiariesSlugRoute: typeof BeneficiariesSlugRoute
+  RegisterBeneficiaryRoute: typeof RegisterBeneficiaryRoute
+  RegisterVolunteerRoute: typeof RegisterVolunteerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/volunteer': {
+      id: '/volunteer'
+      path: '/volunteer'
+      fullPath: '/volunteer'
+      preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transparency': {
+      id: '/transparency'
+      path: '/transparency'
+      fullPath: '/transparency'
+      preLoaderRoute: typeof TransparencyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tax-benefits': {
+      id: '/tax-benefits'
+      path: '/tax-benefits'
+      fullPath: '/tax-benefits'
+      preLoaderRoute: typeof TaxBenefitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sponsor': {
+      id: '/sponsor'
+      path: '/sponsor'
+      fullPath: '/sponsor'
+      preLoaderRoute: typeof SponsorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/media': {
+      id: '/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof MediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaigns': {
+      id: '/campaigns'
+      path: '/campaigns'
+      fullPath: '/campaigns'
+      preLoaderRoute: typeof CampaignsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +330,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/register/volunteer': {
+      id: '/register/volunteer'
+      path: '/register/volunteer'
+      fullPath: '/register/volunteer'
+      preLoaderRoute: typeof RegisterVolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register/beneficiary': {
+      id: '/register/beneficiary'
+      path: '/register/beneficiary'
+      fullPath: '/register/beneficiary'
+      preLoaderRoute: typeof RegisterBeneficiaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beneficiaries/$slug': {
+      id: '/beneficiaries/$slug'
+      path: '/beneficiaries/$slug'
+      fullPath: '/beneficiaries/$slug'
+      preLoaderRoute: typeof BeneficiariesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/donor': {
+      id: '/_authenticated/donor'
+      path: '/donor'
+      fullPath: '/donor'
+      preLoaderRoute: typeof AuthenticatedDonorRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedDonorRoute: typeof AuthenticatedDonorRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedDonorRoute: AuthenticatedDonorRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  CampaignsRoute: CampaignsRoute,
+  ContactRoute: ContactRoute,
+  DonateRoute: DonateRoute,
+  MediaRoute: MediaRoute,
+  SponsorRoute: SponsorRoute,
+  TaxBenefitsRoute: TaxBenefitsRoute,
+  TransparencyRoute: TransparencyRoute,
+  VolunteerRoute: VolunteerRoute,
+  BeneficiariesSlugRoute: BeneficiariesSlugRoute,
+  RegisterBeneficiaryRoute: RegisterBeneficiaryRoute,
+  RegisterVolunteerRoute: RegisterVolunteerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
