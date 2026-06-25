@@ -14,19 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
       beneficiaries: {
         Row: {
           active: boolean
           age: number | null
           category: Database["public"]["Enums"]["sponsorship_category"]
           created_at: string
+          funds_allocated: number
+          funds_pending_bills: number
+          funds_released: number
           goal_amount: number
           id: string
           image_url: string | null
           location: string | null
           monthly_amount: number
           name: string
+          needs_amount: number | null
           raised_amount: number
+          registration_id: string | null
           slug: string
           story: string | null
           updated_at: string
@@ -37,13 +81,18 @@ export type Database = {
           age?: number | null
           category: Database["public"]["Enums"]["sponsorship_category"]
           created_at?: string
+          funds_allocated?: number
+          funds_pending_bills?: number
+          funds_released?: number
           goal_amount?: number
           id?: string
           image_url?: string | null
           location?: string | null
           monthly_amount?: number
           name: string
+          needs_amount?: number | null
           raised_amount?: number
+          registration_id?: string | null
           slug: string
           story?: string | null
           updated_at?: string
@@ -54,19 +103,163 @@ export type Database = {
           age?: number | null
           category?: Database["public"]["Enums"]["sponsorship_category"]
           created_at?: string
+          funds_allocated?: number
+          funds_pending_bills?: number
+          funds_released?: number
           goal_amount?: number
           id?: string
           image_url?: string | null
           location?: string | null
           monthly_amount?: number
           name?: string
+          needs_amount?: number | null
           raised_amount?: number
+          registration_id?: string | null
           slug?: string
           story?: string | null
           updated_at?: string
           verified?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "beneficiaries_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "beneficiary_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      beneficiary_registrations: {
+        Row: {
+          account_holder_name: string | null
+          address: string | null
+          approved_beneficiary_id: string | null
+          bank_account_number: string | null
+          bank_ifsc: string | null
+          bank_name: string | null
+          beneficiary_kind: Database["public"]["Enums"]["beneficiary_kind"]
+          bpl_card_number: string | null
+          city: string | null
+          created_at: string
+          current_medications: string | null
+          date_of_birth: string | null
+          disabilities: string | null
+          email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relation: string | null
+          family_size: number | null
+          full_name: string
+          gender: string | null
+          govt_schemes: string | null
+          guardian_name: string | null
+          guardian_phone: string | null
+          guardian_relation: string | null
+          id: string
+          income_source: string | null
+          medical_conditions: string | null
+          monthly_income: number | null
+          phone: string | null
+          pincode: string | null
+          registrant_type: Database["public"]["Enums"]["registrant_type"]
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          state: string | null
+          status: Database["public"]["Enums"]["registration_status"]
+          submitted_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_holder_name?: string | null
+          address?: string | null
+          approved_beneficiary_id?: string | null
+          bank_account_number?: string | null
+          bank_ifsc?: string | null
+          bank_name?: string | null
+          beneficiary_kind: Database["public"]["Enums"]["beneficiary_kind"]
+          bpl_card_number?: string | null
+          city?: string | null
+          created_at?: string
+          current_medications?: string | null
+          date_of_birth?: string | null
+          disabilities?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relation?: string | null
+          family_size?: number | null
+          full_name: string
+          gender?: string | null
+          govt_schemes?: string | null
+          guardian_name?: string | null
+          guardian_phone?: string | null
+          guardian_relation?: string | null
+          id?: string
+          income_source?: string | null
+          medical_conditions?: string | null
+          monthly_income?: number | null
+          phone?: string | null
+          pincode?: string | null
+          registrant_type: Database["public"]["Enums"]["registrant_type"]
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["registration_status"]
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_holder_name?: string | null
+          address?: string | null
+          approved_beneficiary_id?: string | null
+          bank_account_number?: string | null
+          bank_ifsc?: string | null
+          bank_name?: string | null
+          beneficiary_kind?: Database["public"]["Enums"]["beneficiary_kind"]
+          bpl_card_number?: string | null
+          city?: string | null
+          created_at?: string
+          current_medications?: string | null
+          date_of_birth?: string | null
+          disabilities?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relation?: string | null
+          family_size?: number | null
+          full_name?: string
+          gender?: string | null
+          govt_schemes?: string | null
+          guardian_name?: string | null
+          guardian_phone?: string | null
+          guardian_relation?: string | null
+          id?: string
+          income_source?: string | null
+          medical_conditions?: string | null
+          monthly_income?: number | null
+          phone?: string | null
+          pincode?: string | null
+          registrant_type?: Database["public"]["Enums"]["registrant_type"]
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["registration_status"]
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beneficiary_registrations_approved_beneficiary_id_fkey"
+            columns: ["approved_beneficiary_id"]
+            isOneToOne: false
+            referencedRelation: "beneficiaries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       beneficiary_updates: {
         Row: {
@@ -188,6 +381,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      kyc_documents: {
+        Row: {
+          created_at: string
+          doc_type: Database["public"]["Enums"]["kyc_doc_type"]
+          file_name: string | null
+          file_path: string
+          id: string
+          mime_type: string | null
+          notes: string | null
+          size_bytes: number | null
+          subject_id: string
+          subject_type: Database["public"]["Enums"]["kyc_subject_type"]
+          updated_at: string
+          uploaded_by: string | null
+          verified: boolean
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          doc_type: Database["public"]["Enums"]["kyc_doc_type"]
+          file_name?: string | null
+          file_path: string
+          id?: string
+          mime_type?: string | null
+          notes?: string | null
+          size_bytes?: number | null
+          subject_id: string
+          subject_type: Database["public"]["Enums"]["kyc_subject_type"]
+          updated_at?: string
+          uploaded_by?: string | null
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          doc_type?: Database["public"]["Enums"]["kyc_doc_type"]
+          file_name?: string | null
+          file_path?: string
+          id?: string
+          mime_type?: string | null
+          notes?: string | null
+          size_bytes?: number | null
+          subject_id?: string
+          subject_type?: Database["public"]["Enums"]["kyc_subject_type"]
+          updated_at?: string
+          uploaded_by?: string | null
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
       }
       messages: {
         Row: {
@@ -364,6 +611,87 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      volunteer_profiles: {
+        Row: {
+          address: string | null
+          availability: string | null
+          city: string | null
+          created_at: string
+          date_of_birth: string | null
+          email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          interests: string[] | null
+          kyc_status: Database["public"]["Enums"]["registration_status"]
+          occupation: string | null
+          phone: string | null
+          pincode: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          skills: string[] | null
+          state: string | null
+          updated_at: string
+          user_id: string
+          why_volunteer: string | null
+        }
+        Insert: {
+          address?: string | null
+          availability?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          full_name: string
+          gender?: string | null
+          id?: string
+          interests?: string[] | null
+          kyc_status?: Database["public"]["Enums"]["registration_status"]
+          occupation?: string | null
+          phone?: string | null
+          pincode?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          skills?: string[] | null
+          state?: string | null
+          updated_at?: string
+          user_id: string
+          why_volunteer?: string | null
+        }
+        Update: {
+          address?: string | null
+          availability?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          interests?: string[] | null
+          kyc_status?: Database["public"]["Enums"]["registration_status"]
+          occupation?: string | null
+          phone?: string | null
+          pincode?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          skills?: string[] | null
+          state?: string | null
+          updated_at?: string
+          user_id?: string
+          why_volunteer?: string | null
         }
         Relationships: []
       }
