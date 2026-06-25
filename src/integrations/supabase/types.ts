@@ -14,6 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
+      beneficiaries: {
+        Row: {
+          active: boolean
+          age: number | null
+          category: Database["public"]["Enums"]["sponsorship_category"]
+          created_at: string
+          goal_amount: number
+          id: string
+          image_url: string | null
+          location: string | null
+          monthly_amount: number
+          name: string
+          raised_amount: number
+          slug: string
+          story: string | null
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          active?: boolean
+          age?: number | null
+          category: Database["public"]["Enums"]["sponsorship_category"]
+          created_at?: string
+          goal_amount?: number
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          monthly_amount?: number
+          name: string
+          raised_amount?: number
+          slug: string
+          story?: string | null
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          active?: boolean
+          age?: number | null
+          category?: Database["public"]["Enums"]["sponsorship_category"]
+          created_at?: string
+          goal_amount?: number
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          monthly_amount?: number
+          name?: string
+          raised_amount?: number
+          slug?: string
+          story?: string | null
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      beneficiary_updates: {
+        Row: {
+          beneficiary_id: string
+          body: string
+          created_at: string
+          id: string
+          image_url: string | null
+          posted_by: string | null
+          title: string
+        }
+        Insert: {
+          beneficiary_id: string
+          body: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          posted_by?: string | null
+          title: string
+        }
+        Update: {
+          beneficiary_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          posted_by?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beneficiary_updates_beneficiary_id_fkey"
+            columns: ["beneficiary_id"]
+            isOneToOne: false
+            referencedRelation: "beneficiaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       donations: {
         Row: {
           amount: number
@@ -62,6 +154,79 @@ export type Database = {
         }
         Relationships: []
       }
+      impact_scores: {
+        Row: {
+          beneficiary_id: string
+          generated_at: string
+          id: string
+          model: string | null
+          score: number
+          summary: string
+        }
+        Insert: {
+          beneficiary_id: string
+          generated_at?: string
+          id?: string
+          model?: string | null
+          score: number
+          summary: string
+        }
+        Update: {
+          beneficiary_id?: string
+          generated_at?: string
+          id?: string
+          model?: string | null
+          score?: number
+          summary?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "impact_scores_beneficiary_id_fkey"
+            columns: ["beneficiary_id"]
+            isOneToOne: true
+            referencedRelation: "beneficiaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          ai_sentiment: string | null
+          beneficiary_id: string
+          body: string
+          created_at: string
+          id: string
+          moderation_status: Database["public"]["Enums"]["moderation_status"]
+          sender_id: string
+        }
+        Insert: {
+          ai_sentiment?: string | null
+          beneficiary_id: string
+          body: string
+          created_at?: string
+          id?: string
+          moderation_status?: Database["public"]["Enums"]["moderation_status"]
+          sender_id: string
+        }
+        Update: {
+          ai_sentiment?: string | null
+          beneficiary_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          moderation_status?: Database["public"]["Enums"]["moderation_status"]
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_beneficiary_id_fkey"
+            columns: ["beneficiary_id"]
+            isOneToOne: false
+            referencedRelation: "beneficiaries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           address: string | null
@@ -94,6 +259,50 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      scheduled_calls: {
+        Row: {
+          beneficiary_id: string
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["call_kind"]
+          link: string | null
+          notes: string | null
+          scheduled_at: string
+          sponsor_id: string
+          status: Database["public"]["Enums"]["call_status"]
+        }
+        Insert: {
+          beneficiary_id: string
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["call_kind"]
+          link?: string | null
+          notes?: string | null
+          scheduled_at: string
+          sponsor_id: string
+          status?: Database["public"]["Enums"]["call_status"]
+        }
+        Update: {
+          beneficiary_id?: string
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["call_kind"]
+          link?: string | null
+          notes?: string | null
+          scheduled_at?: string
+          sponsor_id?: string
+          status?: Database["public"]["Enums"]["call_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_calls_beneficiary_id_fkey"
+            columns: ["beneficiary_id"]
+            isOneToOne: false
+            referencedRelation: "beneficiaries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sponsorships: {
         Row: {
@@ -170,11 +379,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_sponsor_of: {
+        Args: { _beneficiary_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "manager" | "donor" | "volunteer"
+      call_kind: "video" | "audio"
+      call_status: "requested" | "confirmed" | "completed" | "cancelled"
       donation_frequency: "one_time" | "monthly"
       donation_status: "pending" | "completed" | "failed" | "refunded"
+      moderation_status: "pending" | "approved" | "rejected"
       sponsorship_category: "child" | "elder"
       sponsorship_status: "active" | "paused" | "ended"
     }
@@ -305,8 +521,11 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "manager", "donor", "volunteer"],
+      call_kind: ["video", "audio"],
+      call_status: ["requested", "confirmed", "completed", "cancelled"],
       donation_frequency: ["one_time", "monthly"],
       donation_status: ["pending", "completed", "failed", "refunded"],
+      moderation_status: ["pending", "approved", "rejected"],
       sponsorship_category: ["child", "elder"],
       sponsorship_status: ["active", "paused", "ended"],
     },
