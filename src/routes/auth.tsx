@@ -77,7 +77,7 @@ function AuthPage() {
           <div className="absolute -top-16 -right-16 size-60 rounded-full bg-accent/30 blur-3xl" />
           <div className="absolute -bottom-20 -left-20 size-72 rounded-full bg-secondary/30 blur-3xl" />
           <div className="relative">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold backdrop-blur">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/25 text-xs font-semibold">
               <Sparkles className="size-3.5" /> Welcome to ANSJ Foundation
             </span>
             <h2 className="font-heading text-4xl font-bold mt-5 leading-tight">
