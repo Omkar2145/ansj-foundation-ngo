@@ -163,9 +163,11 @@
     color: transparent;
   }
   .glass {
-    background: color-mix(in oklab, var(--card) 70%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    /* Solid translucent fill — avoids backdrop-filter, which re-samples and
+       blurs every pixel underneath on every frame. That cost is paid on
+       every scroll tick because .glass is used on the sticky Navbar, and
+       is the main cause of scroll lag. */
+    background: color-mix(in oklab, var(--card) 92%, transparent);
     border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
   }
   .card-hover {
