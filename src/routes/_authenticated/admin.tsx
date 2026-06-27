@@ -16,6 +16,7 @@ type VolunteerProfile = Database["public"]["Tables"]["volunteer_profiles"]["Row"
 type AuditRow = Database["public"]["Tables"]["audit_log"]["Row"];
 type KycRow = Database["public"]["Tables"]["kyc_documents"]["Row"];
 type ExpenseRow = Database["public"]["Tables"]["expenses"]["Row"];
+type DonationRow = Database["public"]["Tables"]["donations"]["Row"];
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — ANSJ Foundation" }] }),
@@ -70,6 +71,7 @@ function AdminPage() {
             <TabsTrigger value="volunteers">Volunteer Applications</TabsTrigger>
             <TabsTrigger value="kyc">KYC Documents</TabsTrigger>
             <TabsTrigger value="expenses">Expenses & Bills</TabsTrigger>
+            <TabsTrigger value="donations">Donations</TabsTrigger>
             <TabsTrigger value="audit">Audit Log</TabsTrigger>
           </TabsList>
 
@@ -77,6 +79,7 @@ function AdminPage() {
           <TabsContent value="volunteers" className="mt-6"><VolunteersTab /></TabsContent>
           <TabsContent value="kyc" className="mt-6"><KycTab /></TabsContent>
           <TabsContent value="expenses" className="mt-6"><ExpensesTab /></TabsContent>
+          <TabsContent value="donations" className="mt-6"><DonationsTab /></TabsContent>
           <TabsContent value="audit" className="mt-6"><AuditTab /></TabsContent>
         </Tabs>
       </section>
@@ -90,6 +93,8 @@ function statusBadge(status: string) {
     under_review: "bg-blue-100 text-blue-900 dark:bg-blue-900/30 dark:text-blue-200",
     approved: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
     verified: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
+    completed: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
+    failed: "bg-rose-100 text-rose-900 dark:bg-rose-900/30 dark:text-rose-200",
     rejected: "bg-rose-100 text-rose-900 dark:bg-rose-900/30 dark:text-rose-200",
   };
   return <Badge className={variants[status] ?? ""}>{status.replace("_", " ")}</Badge>;
@@ -391,6 +396,69 @@ function ExpensesTab() {
               )}
             </div>
           </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+function DonationsTab() {
+  const [rows, setRows] = useState<DonationRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("donations")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) toast.error(error.message);
+    else setRows(data ?? []);
+    setLoading(false);
+  };
+  useEffect(() => { void load(); }, []);
+
+  const decide = async (row: DonationRow, status: "completed" | "failed") => {
+    const receipt_number =
+      status === "completed" && !row.receipt_number
+        ? `ANSJ-${new Date().getFullYear()}-${row.id.slice(0, 8).toUpperCase()}`
+        : row.receipt_number;
+    const { error } = await supabase
+      .from("donations")
+      .update({ status, receipt_number })
+      .eq("id", row.id);
+    if (error) { toast.error(error.message); return; }
+    await writeAudit(`donation.${status}`, "donation", row.id, { status: row.status }, { status });
+    toast.success(`Donation marked ${status}`);
+    void load();
+  };
+
+  if (loading) return <Loader2 className="size-6 animate-spin text-muted-foreground" />;
+  if (!rows.length) return <p className="text-muted-foreground">No donations yet.</p>;
+
+  return (
+    <div className="grid gap-4">
+      {rows.map((r) => (
+        <Card key={r.id}>
+          <CardHeader className="flex flex-row items-start justify-between gap-4">
+            <div>
+              <CardTitle className="text-base">
+                {r.currency} {Number(r.amount).toLocaleString("en-IN")} — {r.category}
+              </CardTitle>
+              <div className="text-xs text-muted-foreground mt-1">
+                {r.frequency.replace("_", " ")} • {new Date(r.created_at).toLocaleDateString("en-IN")}
+                {r.receipt_number && <> • Receipt: {r.receipt_number}</>}
+              </div>
+            </div>
+            {statusBadge(r.status)}
+          </CardHeader>
+          {r.status === "pending" && (
+            <CardContent className="flex gap-2 flex-wrap">
+              <Button size="sm" onClick={() => void decide(r, "completed")}>Mark Completed</Button>
+              <Button size="sm" variant="destructive" onClick={() => void decide(r, "failed")}>Mark Failed</Button>
+            </CardContent>
+          )}
         </Card>
       ))}
     </div>
