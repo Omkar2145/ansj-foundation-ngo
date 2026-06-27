@@ -15,6 +15,7 @@ type Registration = Database["public"]["Tables"]["beneficiary_registrations"]["R
 type VolunteerProfile = Database["public"]["Tables"]["volunteer_profiles"]["Row"];
 type AuditRow = Database["public"]["Tables"]["audit_log"]["Row"];
 type KycRow = Database["public"]["Tables"]["kyc_documents"]["Row"];
+type ExpenseRow = Database["public"]["Tables"]["expenses"]["Row"];
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — ANSJ Foundation" }] }),
@@ -68,12 +69,14 @@ function AdminPage() {
             <TabsTrigger value="registrations">Beneficiary Registrations</TabsTrigger>
             <TabsTrigger value="volunteers">Volunteer Applications</TabsTrigger>
             <TabsTrigger value="kyc">KYC Documents</TabsTrigger>
+            <TabsTrigger value="expenses">Expenses & Bills</TabsTrigger>
             <TabsTrigger value="audit">Audit Log</TabsTrigger>
           </TabsList>
 
           <TabsContent value="registrations" className="mt-6"><RegistrationsTab /></TabsContent>
           <TabsContent value="volunteers" className="mt-6"><VolunteersTab /></TabsContent>
           <TabsContent value="kyc" className="mt-6"><KycTab /></TabsContent>
+          <TabsContent value="expenses" className="mt-6"><ExpensesTab /></TabsContent>
           <TabsContent value="audit" className="mt-6"><AuditTab /></TabsContent>
         </Tabs>
       </section>
@@ -86,6 +89,7 @@ function statusBadge(status: string) {
     pending: "bg-amber-100 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200",
     under_review: "bg-blue-100 text-blue-900 dark:bg-blue-900/30 dark:text-blue-200",
     approved: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
+    verified: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200",
     rejected: "bg-rose-100 text-rose-900 dark:bg-rose-900/30 dark:text-rose-200",
   };
   return <Badge className={variants[status] ?? ""}>{status.replace("_", " ")}</Badge>;
@@ -315,6 +319,75 @@ function KycTab() {
                 <Button size="sm" variant="ghost" onClick={() => void verify(r, false)}>Unverify</Button>
               ) : (
                 <Button size="sm" onClick={() => void verify(r, true)}>Verify</Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+function ExpensesTab() {
+  const [rows, setRows] = useState<ExpenseRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("expenses")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) toast.error(error.message);
+    else setRows(data ?? []);
+    setLoading(false);
+  };
+  useEffect(() => { void load(); }, []);
+
+  const decide = async (row: ExpenseRow, status: "verified" | "rejected") => {
+    const { data: userData } = await supabase.auth.getUser();
+    const { error } = await supabase
+      .from("expenses")
+      .update({ status, verified_by: userData.user?.id ?? null, verified_at: new Date().toISOString() })
+      .eq("id", row.id);
+    if (error) { toast.error(error.message); return; }
+    await writeAudit(`expense.${status}`, "expense", row.id, { status: row.status }, { status });
+    toast.success(`Bill ${status}`);
+    void load();
+  };
+
+  const viewBill = async (path: string) => {
+    const { data, error } = await supabase.storage.from("expense-bills").createSignedUrl(path, 60);
+    if (error || !data) { toast.error("Cannot open bill"); return; }
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+  };
+
+  if (loading) return <Loader2 className="size-6 animate-spin text-muted-foreground" />;
+  if (!rows.length) return <p className="text-muted-foreground">No expenses submitted yet.</p>;
+
+  return (
+    <div className="grid gap-4">
+      {rows.map((r) => (
+        <Card key={r.id}>
+          <CardHeader className="flex flex-row items-start justify-between gap-4">
+            <div>
+              <CardTitle className="text-base">{r.category} — ₹{r.amount}</CardTitle>
+              <div className="text-xs text-muted-foreground mt-1">
+                Vendor: {r.vendor_name} • {r.vendor_phone} • {new Date(r.created_at).toLocaleDateString()}
+              </div>
+            </div>
+            {statusBadge(r.status)}
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            {r.vendor_address && <p className="text-xs text-muted-foreground">{r.vendor_address}</p>}
+            <div className="flex gap-2 flex-wrap">
+              <Button size="sm" variant="outline" onClick={() => void viewBill(r.bill_path)}>View Bill</Button>
+              {r.status === "pending" && (
+                <>
+                  <Button size="sm" onClick={() => void decide(r, "verified")}>Approve</Button>
+                  <Button size="sm" variant="destructive" onClick={() => void decide(r, "rejected")}>Reject</Button>
+                </>
               )}
             </div>
           </CardContent>
