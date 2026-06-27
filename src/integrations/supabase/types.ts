@@ -299,6 +299,60 @@ export type Database = {
           },
         ]
       }
+      expenses: {
+        Row: {
+          amount: number
+          beneficiary_id: string
+          bill_path: string
+          category: string
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["expense_status"]
+          submitted_by: string
+          updated_at: string
+          vendor_address: string | null
+          vendor_name: string
+          vendor_phone: string
+          verification_notes: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          amount: number
+          beneficiary_id: string
+          bill_path: string
+          category: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["expense_status"]
+          submitted_by: string
+          updated_at?: string
+          vendor_address?: string | null
+          vendor_name: string
+          vendor_phone: string
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          amount?: number
+          beneficiary_id?: string
+          bill_path?: string
+          category?: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["expense_status"]
+          submitted_by?: string
+          updated_at?: string
+          vendor_address?: string | null
+          vendor_name?: string
+          vendor_phone?: string
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
@@ -705,6 +759,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "manager" | "donor" | "volunteer" | "csr"
       beneficiary_kind: "child" | "elderly"
+      expense_status: "pending" | "verified" | "rejected"
       call_kind: "video" | "audio"
       call_status: "requested" | "confirmed" | "completed" | "cancelled"
       donation_frequency: "one_time" | "monthly"
