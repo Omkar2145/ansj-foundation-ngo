@@ -68,17 +68,17 @@ function AuthPage() {
 };
 
   const handleGoogle = async () => {
-    setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/donor",
-    });
-    if (result.error) {
-      toast.error("Google sign-in failed");
-      setLoading(false);
-    } else if (!result.redirected) {
-      navigate({ to: "/donor" });
-    }
-  };
+  setLoading(true);
+  const result = await lovable.auth.signInWithOAuth("google", {
+    redirect_uri: window.location.origin + "/donor",
+  });
+  if (result.error) {
+    toast.error(result.error instanceof Error ? result.error.message : "Google sign-in failed");
+    setLoading(false);
+  } else if (!result.redirected) {
+    navigate({ to: "/donor" });
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex items-center pt-20 pb-12">
