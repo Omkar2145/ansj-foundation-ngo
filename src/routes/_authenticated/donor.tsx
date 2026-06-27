@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { generateReceiptPDF } from "@/lib/receipt";
+import { MessageThread } from "@/components/site/MessageThread";
 
 export const Route = createFileRoute("/_authenticated/donor")({
   head: () => ({ meta: [{ title: "Donor Dashboard · ANSJ Foundation" }] }),
@@ -40,6 +41,7 @@ type Donation = {
 
 type Sponsorship = {
   id: string;
+  beneficiary_id: string;
   beneficiary_name: string | null;
   category: string;
   monthly_amount: number;
@@ -174,6 +176,7 @@ function DonorDashboard() {
           <TabsList>
             <TabsTrigger value="donations">Donations</TabsTrigger>
             <TabsTrigger value="sponsorships">Sponsorships</TabsTrigger>
+            <TabsTrigger value="messages">Messages</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
 
@@ -267,6 +270,16 @@ function DonorDashboard() {
                   ))}
                 </div>
               )}
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="messages" className="mt-4">
+            <Card className="p-6">
+              <MessageThread
+                sponsorships={sponsorships
+                  .filter((s) => s.status === "active")
+                  .map((s) => ({ beneficiary_id: s.beneficiary_id, beneficiary_name: s.beneficiary_name }))}
+              />
             </Card>
           </TabsContent>
 
