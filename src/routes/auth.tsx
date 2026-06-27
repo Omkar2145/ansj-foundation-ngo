@@ -29,32 +29,43 @@ function AuthPage() {
     });
   }, [navigate]);
 
-  const handleEmailAuth = async (mode: "signin" | "signup") => {
-    setLoading(true);
-    try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: window.location.origin,
-            data: { full_name: fullName },
-          },
-        });
-        if (error) throw error;
-        toast.success("Welcome to ANSJ Foundation!");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        toast.success("Signed in");
+ const handleEmailAuth = async (mode: "signin" | "signup") => {
+  setLoading(true);
+  try {
+    if (mode === "signup") {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: window.location.origin,
+          data: { full_name: fullName },
+        },
+      });
+      if (error) throw error;
+
+      // Supabase returns no error even if this email is already registered
+      if (data.user?.identities?.length === 0) {
+        toast.error("This email is already registered. Please sign in instead.");
+        return;
       }
+      if (!data.session) {
+        toast.success("Account created! Check your email to confirm, then sign in.");
+        return;
+      }
+      toast.success("Welcome to ANSJ Foundation!");
       navigate({ to: "/donor" });
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Authentication failed");
-    } finally {
-      setLoading(false);
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      toast.success("Signed in");
+      navigate({ to: "/donor" });
     }
-  };
+  } catch (e) {
+    toast.error(e instanceof Error ? e.message : "Authentication failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleGoogle = async () => {
     setLoading(true);
