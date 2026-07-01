@@ -299,6 +299,54 @@ export type Database = {
           },
         ]
       }
+      donations: {
+        Row: {
+          amount: number
+          campaign: string | null
+          category: string
+          created_at: string
+          currency: string
+          frequency: Database["public"]["Enums"]["donation_frequency"]
+          id: string
+          message: string | null
+          receipt_number: string | null
+          status: Database["public"]["Enums"]["donation_status"]
+          transaction_ref: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          campaign?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          frequency?: Database["public"]["Enums"]["donation_frequency"]
+          id?: string
+          message?: string | null
+          receipt_number?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          transaction_ref?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          campaign?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          frequency?: Database["public"]["Enums"]["donation_frequency"]
+          id?: string
+          message?: string | null
+          receipt_number?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          transaction_ref?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       expenses: {
         Row: {
           amount: number
@@ -351,55 +399,15 @@ export type Database = {
           verified_at?: string | null
           verified_by?: string | null
         }
-        Relationships: []
-      }
-      donations: {
-        Row: {
-          amount: number
-          campaign: string | null
-          category: string
-          created_at: string
-          currency: string
-          frequency: Database["public"]["Enums"]["donation_frequency"]
-          id: string
-          message: string | null
-          receipt_number: string | null
-          status: Database["public"]["Enums"]["donation_status"]
-          transaction_ref: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          campaign?: string | null
-          category?: string
-          created_at?: string
-          currency?: string
-          frequency?: Database["public"]["Enums"]["donation_frequency"]
-          id?: string
-          message?: string | null
-          receipt_number?: string | null
-          status?: Database["public"]["Enums"]["donation_status"]
-          transaction_ref?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          campaign?: string | null
-          category?: string
-          created_at?: string
-          currency?: string
-          frequency?: Database["public"]["Enums"]["donation_frequency"]
-          id?: string
-          message?: string | null
-          receipt_number?: string | null
-          status?: Database["public"]["Enums"]["donation_status"]
-          transaction_ref?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "expenses_beneficiary_id_fkey"
+            columns: ["beneficiary_id"]
+            isOneToOne: false
+            referencedRelation: "beneficiaries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       impact_scores: {
         Row: {
@@ -754,16 +762,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_unapproved_expenses: {
+        Args: { _beneficiary_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "manager" | "donor" | "volunteer" | "csr"
       beneficiary_kind: "child" | "elderly"
-      expense_status: "pending" | "verified" | "rejected"
       call_kind: "video" | "audio"
       call_status: "requested" | "confirmed" | "completed" | "cancelled"
       donation_frequency: "one_time" | "monthly"
       donation_status: "pending" | "completed" | "failed" | "refunded"
+      expense_status: "pending" | "verified" | "rejected"
       kyc_doc_type:
         | "aadhaar"
         | "pan"
@@ -915,6 +926,7 @@ export const Constants = {
       call_status: ["requested", "confirmed", "completed", "cancelled"],
       donation_frequency: ["one_time", "monthly"],
       donation_status: ["pending", "completed", "failed", "refunded"],
+      expense_status: ["pending", "verified", "rejected"],
       kyc_doc_type: [
         "aadhaar",
         "pan",
