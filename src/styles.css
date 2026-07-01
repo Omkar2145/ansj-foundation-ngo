@@ -177,6 +177,10 @@
     background: color-mix(in oklab, black 42%, transparent);
     border: 1px solid color-mix(in oklab, white 16%, transparent);
   }
+  .glass-dark {
+    background: color-mix(in oklab, black 42%, transparent);
+    border: 1px solid color-mix(in oklab, white 16%, transparent);
+  }
   .card-hover {
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
   }
