@@ -22,19 +22,19 @@ export function Hero() {
           width={1920}
           height={1080}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/85 via-primary/65 to-secondary/55" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/92 via-primary/78 to-secondary/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="max-w-3xl text-primary-foreground animate-fade-up">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm font-medium mb-6">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-dark text-sm font-medium mb-6">
             <span className="size-2 rounded-full bg-accent animate-pulse" />
             100% transparent · 80G certified · FCRA registered
           </span>
           <h1 className="font-heading font-extrabold text-4xl sm:text-5xl lg:text-7xl leading-[1.05] mb-6">
             Transforming Lives Through{" "}
-            <span className="text-accent">Education, Healthcare & Compassion</span>
+            <span className="gradient-gold-text">Education, Healthcare & Compassion</span>
           </h1>
           <p className="text-lg sm:text-xl text-primary-foreground/90 max-w-2xl mb-8">
             Sponsor a child's education or an elder's healthcare. Track every rupee, watch real progress, and build a relationship that changes a life.
@@ -86,7 +86,7 @@ export function Hero() {
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className="glass rounded-2xl p-5 lg:p-6 text-primary-foreground animate-fade-up"
+              className="glass-dark rounded-2xl p-5 lg:p-6 text-primary-foreground animate-fade-up shadow-xl"
               style={{ animationDelay: `${0.2 + i * 0.1}s` }}
             >
               <div className="text-3xl lg:text-4xl font-heading font-bold text-accent">
