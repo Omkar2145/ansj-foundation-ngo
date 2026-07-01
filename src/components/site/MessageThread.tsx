@@ -37,7 +37,7 @@ export function MessageThread({ sponsorships }: { sponsorships: Sponsorship[] })
   useEffect(() => { if (selected) void load(selected); }, [selected]);
 
   const send = async () => {
-    if (!body.trim() || !selected) return;
+    if (!body.trim() || !selected || !userId) return;
     setSending(true);
     const { error } = await supabase.from("messages").insert({
       sender_id: userId, beneficiary_id: selected, body: body.trim(),
