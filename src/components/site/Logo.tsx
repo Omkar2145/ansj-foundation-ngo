@@ -1,13 +1,14 @@
-import { HandHeart } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import logoAsset from "@/assets/ansj-logo.jpeg.asset.json";
 
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
     <Link to="/" className="flex items-center gap-2.5 group">
-      <div className="relative size-11 rounded-2xl gradient-hero grid place-items-center shadow-[var(--shadow-soft)] overflow-hidden">
-        <HandHeart className="size-6 text-primary-foreground" strokeWidth={2.2} />
-        <span className="absolute -bottom-1 -right-1 size-3.5 rounded-full bg-accent ring-2 ring-background" />
-      </div>
+      <img
+        src={logoAsset.url}
+        alt="ANSJ Welfare & Education Foundation"
+        className="size-11 rounded-full object-contain bg-white shadow-[var(--shadow-soft)]"
+      />
       {!compact && (
         <div className="leading-tight">
           <div className="font-heading font-extrabold text-[15px] sm:text-base tracking-tight">
